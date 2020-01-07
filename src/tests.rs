@@ -49,9 +49,13 @@ fn std_compatible() {
             write!(
                 mismatches,
                 "\nmismatch for {:?}:\n\
-                 \tus:  {:?}\n\
-                 \tstd: {:?}\n",
-                s, path_env, std
+                 \tus:  ({}) {:?}\n\
+                 \tstd: ({}) {:?}\n",
+                s,
+                path_env.len(),
+                path_env,
+                std.len(),
+                std,
             )
             .unwrap();
         }
