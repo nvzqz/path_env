@@ -25,19 +25,39 @@ fn std_compatible() {
         a,
         b,
         SEP,
-        &format!("{0}{0}",           SEP),
-        &format!("{0}{0}{1}",        SEP, a),
-        &format!("{0}{1}{0}",        SEP, a),
-        &format!("{1}{0}{0}",        SEP, a),
-        &format!("{1}{0}{2}",        SEP, a, b),
-        &format!("{0}{1}{0}{2}",     SEP, a, b),
-        &format!("{1}{0}{2}{0}",     SEP, a, b),
-        &format!("{0}{1}{0}{2}{0}",  SEP, a, b),
+
+        &format!("{0}{0}",          SEP),
+        &format!("{0}{0}{1}",       SEP, a),
+        &format!("{0}{1}{0}",       SEP, a),
+        &format!("{1}{0}{0}",       SEP, a),
+        &format!("{1}{0}{2}",       SEP, a, b),
+        &format!("{0}{1}{0}{2}",    SEP, a, b),
+        &format!("{1}{0}{2}{0}",    SEP, a, b),
+        &format!("{0}{1}{0}{2}{0}", SEP, a, b),
+
         &format!("\"{1}\"{0}{2}",    SEP, a, b),
         &format!("{1}{0}\"{2}\"",    SEP, a, b),
         &format!("\"{1}{0}{2}\"",    SEP, a, b),
         &format!("\"{1}{0}\"{0}{2}", SEP, a, b),
         &format!("{1}{0}\"{0}{2}\"", SEP, a, b),
+
+        &format!("{0}\"{1}\"{0}{2}",    SEP, a, b),
+        &format!("{0}{1}{0}\"{2}\"",    SEP, a, b),
+        &format!("{0}\"{1}{0}{2}\"",    SEP, a, b),
+        &format!("{0}\"{1}{0}\"{0}{2}", SEP, a, b),
+        &format!("{0}{1}{0}\"{0}{2}\"", SEP, a, b),
+
+        &format!("\"{1}\"{0}{2}{0}",    SEP, a, b),
+        &format!("{1}{0}\"{2}\"{0}",    SEP, a, b),
+        &format!("\"{1}{0}{2}\"{0}",    SEP, a, b),
+        &format!("\"{1}{0}\"{0}{2}{0}", SEP, a, b),
+        &format!("{1}{0}\"{0}{2}\"{0}", SEP, a, b),
+
+        &format!("{0}\"{1}\"{0}{2}{0}",    SEP, a, b),
+        &format!("{0}{1}{0}\"{2}\"{0}",    SEP, a, b),
+        &format!("{0}\"{1}{0}{2}\"{0}",    SEP, a, b),
+        &format!("{0}\"{1}{0}\"{0}{2}{0}", SEP, a, b),
+        &format!("{0}{1}{0}\"{0}{2}\"{0}", SEP, a, b),
     ];
 
     let mut mismatches = String::new();
