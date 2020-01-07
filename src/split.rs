@@ -2,17 +2,26 @@ use std::{ffi::OsStr, iter::FusedIterator, path::Path};
 
 use crate::sys::byte_repr::ByteRepr;
 
-/// Creates an iterator over the paths in a `PATH` environment variable.
+/// Creates an iterator over [`Path`] slices in a `PATH` environment variable.
+///
+/// Unlike [`env::split_paths`], this iterator does not allocate.
 ///
 /// See [`PathEnvSplit`] for more info.
 ///
+/// [`env::split_paths`]: https://doc.rust-lang.org/stable/std/env/fn.split_paths.html
+/// [`Path`]: https://doc.rust-lang.org/stable/std/path/struct.Path.html
 /// [`PathEnvSplit`]: struct.PathEnvSplit.html
 #[inline]
-pub fn split<P: ?Sized + AsRef<OsStr>>(path: &P) -> PathEnvSplit {
-    PathEnvSplit::new(path)
+pub fn split<P: ?Sized + AsRef<OsStr>>(unparsed: &P) -> PathEnvSplit {
+    PathEnvSplit::new(unparsed)
 }
 
-/// An iterator over the paths in a `PATH` environment variable.
+/// An iterator over [`Path`] slices in a `PATH` environment variable.
+///
+/// Unlike [`env::split_paths`], this iterator does not allocate.
+///
+/// [`env::split_paths`]: https://doc.rust-lang.org/stable/std/env/fn.split_paths.html
+/// [`Path`]: https://doc.rust-lang.org/stable/std/path/struct.Path.html
 ///
 /// # Examples
 ///
@@ -76,8 +85,8 @@ impl<'a> PathEnvSplit<'a> {
     /// Creates an instance from a reference to the contents of a `PATH`
     /// environment variable.
     #[inline]
-    pub fn new<P: ?Sized + AsRef<OsStr>>(path: &'a P) -> Self {
-        Self(path.as_ref())
+    pub fn new<P: ?Sized + AsRef<OsStr>>(unparsed: &'a P) -> Self {
+        Self(unparsed.as_ref())
     }
 }
 
