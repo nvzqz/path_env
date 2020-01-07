@@ -32,7 +32,6 @@ use std::{
     fmt, io,
     iter::FromIterator,
     path::Path,
-    process::Command,
     slice,
 };
 
@@ -270,16 +269,17 @@ impl PathEnv {
     }
 
     cfg_unix! {
-        /// Returns the path returned by running `getconf PATH`.
+        /// Returns the `PATH` returned by running `getconf PATH`.
         ///
         /// This is usually used to get the default `PATH` on POSIX-compliant
         /// systems.
+        ///
+        /// Use [`os::unix::getconf`] to get the [`OsString`] without parsing.
+        ///
+        /// [`os::unix::getconf`]: os/unix/fn.getconf.html
+        /// [`OsString`]: https://doc.rust-lang.org/std/ffi/struct.OsString.html
         pub fn from_getconf() -> io::Result<Self> {
-            use std::os::unix::ffi::OsStringExt;
-
-            let stdout = Command::new("getconf").arg("PATH").output()?.stdout;
-
-            Ok(OsString::from_vec(stdout).into())
+            os::unix::getconf().map(|path| path.into())
         }
     }
 
