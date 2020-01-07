@@ -98,15 +98,16 @@ fn std_compatible() {
 
     let mut mismatches = String::new();
 
-    for s in strings {
+    for (case, s) in strings.iter().enumerate() {
         let path_env = path_env_outputs(s);
         let std = std_outputs(s);
         if path_env != std {
             write!(
                 mismatches,
-                "\nmismatch for {:?}:\n\
+                "\nmismatch for case {}, \"{}\":\n\
                  \tus:  ({}) {:?}\n\
                  \tstd: ({}) {:?}\n",
+                case,
                 s,
                 path_env.len(),
                 path_env,
