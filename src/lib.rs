@@ -29,7 +29,7 @@ use std::{
     collections::VecDeque,
     env,
     ffi::{OsStr, OsString},
-    fmt, io,
+    fmt,
     iter::FromIterator,
     path::Path,
     slice,
@@ -278,7 +278,7 @@ impl PathEnv {
         ///
         /// [`os::unix::getconf`]: os/unix/fn.getconf.html
         /// [`OsString`]: https://doc.rust-lang.org/std/ffi/struct.OsString.html
-        pub fn from_getconf() -> io::Result<Self> {
+        pub fn from_getconf() -> std::io::Result<Self> {
             os::unix::getconf().map(|path| path.into())
         }
     }
