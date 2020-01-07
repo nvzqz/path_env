@@ -1,0 +1,22 @@
+[package]
+name = "path_env"
+version = "0.0.0"
+authors = ["Nikolai Vazquez"]
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/nvzqz/path_env"
+repository = "https://github.com/nvzqz/path_env"
+documentation = "https://docs.rs/path_env"
+keywords = ["path", "env", "var"]
+description = "Operations on the PATH environment variable."
+edition = "2018"
+
+[package.metadata.docs.rs]
+features = ["_doc-cfg"]
+rustdoc-args = ["--cfg", "feature=\"_doc-cfg\""]
+
+[dependencies]
+memchr = { version = "2", optional = true }
+bytecount = { version = "0.6", optional = true }
+
+[features]
+_doc-cfg = [] # This is currently an unstable feature.
