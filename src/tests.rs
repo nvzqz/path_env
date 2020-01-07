@@ -58,6 +58,11 @@ fn std_compatible() {
         &format!("{0}\"{1}{0}{2}\"{0}",    SEP, a, b),
         &format!("{0}\"{1}{0}\"{0}{2}{0}", SEP, a, b),
         &format!("{0}{1}{0}\"{0}{2}\"{0}", SEP, a, b),
+
+        &format!("\"{1}{0}{2}", SEP, a, b),
+        &format!("{1}\"{0}{2}", SEP, a, b),
+        &format!("{1}{0}\"{2}", SEP, a, b),
+        &format!("{1}{0}{2}\"", SEP, a, b),
     ];
 
     let mut mismatches = String::new();
