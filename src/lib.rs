@@ -43,6 +43,9 @@ mod util;
 #[macro_use]
 mod macros;
 
+#[cfg(test)]
+mod tests;
+
 pub mod os;
 pub mod separator;
 
