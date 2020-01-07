@@ -136,7 +136,6 @@ pub fn normalize<P: AsRef<OsStr>>(path: P) -> OsString {
 /// # Some(())
 /// # }
 /// ```
-#[derive(Clone)]
 pub struct PathEnv {
     /// The `PATH` variable.
     path: OsString,
@@ -145,6 +144,20 @@ pub struct PathEnv {
     /// SAFETY: This is only allowed to reference `path`, never external data.
     /// This may never be exposed as 'static in public API.
     parts: VecDeque<*const Path>,
+}
+
+impl Clone for PathEnv {
+    fn clone(&self) -> Self {
+        let path = self.path.clone();
+        let mut parts = self.parts.clone();
+
+        let old_ptr = self.path.as_ptr();
+        let new_ptr = path.as_ptr();
+        let diff = (new_ptr as isize).wrapping_sub(old_ptr as isize);
+
+        unsafe { Self::offset_parts(&mut parts, diff) };
+        Self { path, parts }
+    }
 }
 
 unsafe impl Send for PathEnv {}
@@ -433,6 +446,23 @@ impl PathEnv {
         unsafe { self.reconstruct_back(old_ptr, old_len) }
     }
 
+    unsafe fn offset_parts(parts: &mut VecDeque<*const Path>, diff: isize) {
+        unsafe fn offset(old: *const Path, diff: isize) -> *const Path {
+            // Get length by dereferencing to a slice of a zero-sized type
+            // first, in order to prevent potential undefined behavior. It's
+            // unsure whether this actually helps.
+            let len = (*(old as *const [()])).len();
+
+            let new = (old as *const u8).offset(diff);
+
+            slice::from_raw_parts(new, len) as *const [u8] as *const Path
+        }
+
+        parts.iter_mut().for_each(|part| {
+            *part = offset(*part, diff);
+        });
+    }
+
     /// Reconstructs `self.parts` with different strategies depending on whether
     /// `self.path` is a new allocation.
     ///
@@ -452,24 +482,11 @@ impl PathEnv {
         // Handle reallocation
         if new_ptr != old_ptr {
             let diff = (new_ptr as isize).wrapping_sub(old_ptr as isize);
-            self.parts.iter_mut().for_each(|part| {
-                *part = offset(*part, diff);
-            });
+            Self::offset_parts(&mut self.parts, diff);
         }
 
         self.parts
             .extend(split(ext_buf).map(|part| part as *const Path));
-
-        unsafe fn offset(old: *const Path, diff: isize) -> *const Path {
-            // Get length by dereferencing to a slice of a zero-sized type
-            // first, in order to prevent potential undefined behavior. It's
-            // unsure whether this actually helps.
-            let len = (*(old as *const [()])).len();
-
-            let new = (old as *const u8).offset(diff);
-
-            slice::from_raw_parts(new, len) as *const [u8] as *const Path
-        }
     }
 
     /// Removes the first path in `self`.
