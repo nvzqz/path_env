@@ -16,8 +16,8 @@ fn path_env_outputs(s: &str) -> Vec<PathBuf> {
 
 #[test]
 fn std_compatible() {
-    let a = "/path/to/a/bin";
-    let b = "/path/with/b/bin";
+    let a = "/path/to/bin";
+    let b = "/\u{007F}\u{0080}\u{07FF}\u{0800}\u{FFFF}\u{10000}\u{10FFFF}/bin";
 
     #[rustfmt::skip]
     let strings: &[&str] = &[
