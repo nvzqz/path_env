@@ -1,5 +1,5 @@
 use super::*;
-use std::{env, path::PathBuf};
+use std::{env, fmt::Write, path::PathBuf};
 
 const SEP: &str = separator::STR;
 
@@ -46,12 +46,14 @@ fn std_compatible() {
         let path_env = path_env_outputs(s);
         let std = std_outputs(s);
         if path_env != std {
-            mismatches.push_str(&format!(
+            write!(
+                mismatches,
                 "\nmismatch for {:?}:\n\
                  \tus:  {:?}\n\
                  \tstd: {:?}\n",
                 s, path_env, std
-            ));
+            )
+            .unwrap();
         }
     }
 
